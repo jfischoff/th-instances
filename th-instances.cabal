@@ -10,10 +10,10 @@ Name:                th-instances
 Version:             0.1.0.3
 
 -- A short (one-line) description of the package.
--- Synopsis:            
+Synopsis: A place to collect orphan instances for Template Haskell
 
 -- A longer description of the package.
--- Description: Orphans used for testing     
+Description: A IsString for name, and the beginnings of Arbitrary instances ... I have a instance for Type ... almost ... missing the ForallT.      
 
 -- The license under which the package is released.
 License:             BSD3
@@ -40,7 +40,7 @@ Build-type:          Simple
 -- Extra-source-files:  
 
 -- Constraint on the version of Cabal needed to build this package.
-Cabal-version:       >=1.2
+Cabal-version:       >=1.8
 
 
 Library
