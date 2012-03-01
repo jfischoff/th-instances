@@ -21,6 +21,13 @@
   (major1) == 0 && (major2) <  2 || \
   (major1) == 0 && (major2) == 2 && (minor) <= 8)
 
+/* package derive-2.5.4 */
+#define VERSION_derive "2.5.4"
+#define MIN_VERSION_derive(major1,major2,minor) (\
+  (major1) <  2 || \
+  (major1) == 2 && (major2) <  5 || \
+  (major1) == 2 && (major2) == 5 && (minor) <= 4)
+
 /* package mtl-2.0.1.0 */
 #define VERSION_mtl "2.0.1.0"
 #define MIN_VERSION_mtl(major1,major2,minor) (\

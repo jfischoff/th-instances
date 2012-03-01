@@ -7,7 +7,7 @@ Name:                th-instances
 -- The package version. See the Haskell package versioning policy
 -- (http://www.haskell.org/haskellwiki/Package_versioning_policy) for
 -- standards guiding when and how versions should be incremented.
-Version:             0.1.0.4
+Version:             0.1.0.10
 
 -- A short (one-line) description of the package.
 Synopsis: A place to collect orphan instances for Template Haskell
@@ -46,7 +46,7 @@ Cabal-version:       >=1.8
 Library
   Hs-Source-Dirs: src
   -- Modules exported by the library.
-  Exposed-modules: Language.Haskell.TH.Instances
+  Exposed-modules: Language.Haskell.TH.Instances, Language.Haskell.TH.LiftInstances
   
   -- Packages needed in order to build this package.
   Build-depends: base > 4.0.0 && <= 5.0,
@@ -55,7 +55,8 @@ Library
                  checkers >= 0.2.8,
                  th-lift >= 0.5.4,
                  th-kinds >= 0.1.1,
-                 mtl >= 2.0.1.0
+                 mtl >= 2.0.1.0,
+                 derive >= 2.5.4
   ghc-options:            -Wall 
   
 Test-Suite tests
@@ -73,5 +74,5 @@ Test-Suite tests
                  th-kinds >= 0.1.1,
                  mtl >= 2.0.1.0,
                  template-haskell >= 2.6.0,
-                 checkers >= 0.2.8
-  
+                 checkers >= 0.2.8,
+                 derive >= 2.5.4

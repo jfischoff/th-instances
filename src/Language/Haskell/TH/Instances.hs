@@ -21,6 +21,7 @@ import Control.Monad.Reader
 import Data.List
 import Language.Haskell.TH.LiftInstances
 import Data.Char
+import Data.DeriveTH
 
 import qualified Language.Haskell.TH.Lift as L
 
@@ -50,21 +51,17 @@ type_arb depth = do
             3 -> UnboxedTupleT <$> arbitrary 
             4 -> return ArrowT
             5 -> return ListT
-            6 -> forallt_arb (depth - 1)
+            6 -> ForallT <$> arbitrary <*> arbitrary <*> type_arb (depth - 1)
             7 -> SigT <$> type_arb (depth - 1) <*> arbitrary
             8 -> AppT <$> type_arb (depth - 1) <*> type_arb (depth - 1)
             
---this needs work but I have no use for it now
-forallt_arb :: Int -> Gen Type
-forallt_arb depth = do
-    ForallT <$> (return []) <*> (return []) <*> (return $ VarT $ mkName "test")
     
 instance Arbitrary Kind where
     arbitrary = sized kind_arb
 
 kind_arb :: Int -> Gen Kind        
 kind_arb depth = do
-    let max_option = if depth > 0 then 1 else (2 :: Int)
+    let max_option = if depth > 0 then 0 else (1 :: Int)
     typ <- choose(0, max_option)
     case typ of 
         0 -> return StarK
@@ -83,7 +80,22 @@ haskell_98_type_arb depth = do
         6 -> AppT <$> haskell_98_type_arb (depth - 1) <*> haskell_98_type_arb (depth - 1)
         
 letter_strings =  map (\x -> mkName $ (x:[])) $ take 26 ['a'..]
-  
+
+$(derive makeArbitrary ''Strict)
+$(derive makeArbitrary ''TyVarBndr)
+$(derive makeArbitrary ''Pred)
+
+instance Arbitrary Con where
+    arbitrary = sized arb_con where
+        arb_con 0 = arb_con' 0 (2 :: Int)
+        arb_con size = arb_con' size 3
+        arb_con' size max_option = do
+            option <- choose (0, max_option)
+            case option of 
+                0 -> NormalC <$> arbitrary <*> arbitrary
+                1 -> RecC <$> arbitrary <*> arbitrary
+                2 -> InfixC <$> arbitrary <*> arbitrary <*> arbitrary
+                3 -> ForallC <$> arbitrary <*> arbitrary <*> arb_con (size - 1) 
 --the right way to do this is probably to gen a simply typed environment 
 --and sample functions from it, and convert
 --what I really need to do, is first I generate 
